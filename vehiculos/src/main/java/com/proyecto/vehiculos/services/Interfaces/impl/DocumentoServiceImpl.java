@@ -1,6 +1,10 @@
 package com.proyecto.vehiculos.services.Interfaces.impl;
 
 import com.proyecto.vehiculos.Entities.Documento;
+import com.proyecto.vehiculos.Entities.Vehiculo;
+import com.proyecto.vehiculos.Entities.VehiculoDocumento;
+import com.proyecto.vehiculos.dto.DocumentoEntradaDTO;
+import com.proyecto.vehiculos.dto.RespuestaVehiculoDTO;
 import com.proyecto.vehiculos.repositories.DocumentoRepository;
 import com.proyecto.vehiculos.services.Interfaces.IDocumentoService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -68,4 +72,6 @@ public class DocumentoServiceImpl implements IDocumentoService {
             throw new IllegalArgumentException("El campo 'obligatorioSegunTipo' solo permite los valores: 'RA', 'RM' o 'RR'.");
         }
     }
+
+
 }

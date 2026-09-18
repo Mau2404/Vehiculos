@@ -2,6 +2,7 @@ package com.proyecto.vehiculos.controllers;
 
 import com.proyecto.vehiculos.dto.CrearVehiculoDTO;
 import com.proyecto.vehiculos.dto.DocumentoEntradaDTO;
+import com.proyecto.vehiculos.dto.DocumentoPdfDTO;
 import com.proyecto.vehiculos.dto.RespuestaVehiculoDTO;
 import com.proyecto.vehiculos.Entities.Vehiculo;
 import com.proyecto.vehiculos.Entities.VehiculoDocumento;
@@ -82,4 +83,12 @@ public class VehiculoController {
         VehiculoDocumento vd = vehiculoService.asociarDocumento(id, dto);
         return new ResponseEntity<>(vd, HttpStatus.CREATED);
     }
+
+    // 11. POST: Cargar uno o varios documentos PDF en Base64 asociados a un vehículo
+    @PostMapping("/{id}/documentos/pdf")
+    public ResponseEntity<List<VehiculoDocumento>> cargarDocumentosPdf(@PathVariable Long id, @RequestBody List<DocumentoPdfDTO> listaDtos) {
+        List<VehiculoDocumento> resultado = vehiculoService.cargarDocumentosPdf(id, listaDtos);
+        return new ResponseEntity<>(resultado, HttpStatus.CREATED);
+    }
+    
 }

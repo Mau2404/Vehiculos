@@ -2,6 +2,7 @@ package com.proyecto.vehiculos.services.Interfaces.impl;
 
 import com.proyecto.vehiculos.dto.CrearVehiculoDTO;
 import com.proyecto.vehiculos.dto.DocumentoEntradaDTO;
+import com.proyecto.vehiculos.dto.DocumentoPdfDTO;
 import com.proyecto.vehiculos.dto.RespuestaVehiculoDTO;
 import com.proyecto.vehiculos.Entities.Documento;
 import com.proyecto.vehiculos.Entities.Vehiculo;
@@ -209,4 +210,44 @@ public class VehiculoServiceImpl implements IVehiculoService {
             throw new IllegalArgumentException("La capacidad de pasajeros debe ser al menos de 1.");
         }
     }
+
+    @Transactional
+    public List<VehiculoDocumento> cargarDocumentosPdf(Long vehiculoId, List<DocumentoPdfDTO> listaDtos) {
+        Vehiculo vehiculo = vehiculoRepository.findById(vehiculoId)
+                .orElseThrow(() -> new IllegalArgumentException("Vehículo no encontrado con ID: " + vehiculoId));
+
+        List<VehiculoDocumento> documentosProcesados = new ArrayList<>();
+
+        for (DocumentoPdfDTO dto : listaDtos) {
+            Documento documentoParam = documentoRepository.findById(dto.getDocumentoId())
+                    .orElseThrow(() -> new IllegalArgumentException("Documento paramétrico no encontrado con ID: " + dto.getDocumentoId()));
+
+            VehiculoDocumento vd = new VehiculoDocumento();
+            vd.setVehiculo(vehiculo);
+            vd.setDocumento(documentoParam);
+            vd.setFechaExpedicion(dto.getFechaExpedicion());
+            vd.setFechaVencimiento(dto.getFechaVencimiento());
+            vd.setEstado(dto.getEstado() != null ? dto.getEstado() : "En Verificacion");
+
+            // CONVERSIÓN DE BASE64 A BYTES (BLOB)
+            if (dto.getArchivoBase64() != null && !dto.getArchivoBase64().isEmpty()) {
+                try {
+                    // Limpiar encabezados data:application/pdf;base64, si el usuario los envía por Postman
+                    String base64Clean = dto.getArchivoBase64();
+                    if (base64Clean.contains(",")) {
+                        base64Clean = base64Clean.split(",")[1];
+                    }
+                    byte[] pdfBytes = java.util.Base64.getDecoder().decode(base64Clean);
+                    vd.setArchivoPdf(pdfBytes);
+                } catch (IllegalArgumentException e) {
+                    throw new IllegalArgumentException("El formato Base64 proporcionado para el PDF es inválido.");
+                }
+            }
+
+            documentosProcesados.add(vehiculoDocumentoRepository.save(vd));
+        }
+
+        return documentosProcesados;
+    }
+    
 }
