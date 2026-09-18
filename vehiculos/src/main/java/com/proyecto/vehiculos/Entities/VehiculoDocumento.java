@@ -28,16 +28,20 @@ public class VehiculoDocumento {
     @Column(nullable = false, length = 20)
     private String estado;
 
-    public VehiculoDocumento() {
-    }
+    @Lob
+    @Column(name = "archivo_pdf", columnDefinition = "LONGBLOB")
+    private byte[] archivoPdf;
 
-    public VehiculoDocumento(Long id, Vehiculo vehiculo, Documento documento, LocalDate fechaExpedicion, LocalDate fechaVencimiento, String estado) {
+    public VehiculoDocumento() {}
+
+    public VehiculoDocumento(Long id, Vehiculo vehiculo, Documento documento, LocalDate fechaExpedicion, LocalDate fechaVencimiento, String estado, byte[] archivoPdf) {
         this.id = id;
         this.vehiculo = vehiculo;
         this.documento = documento;
         this.fechaExpedicion = fechaExpedicion;
         this.fechaVencimiento = fechaVencimiento;
         this.estado = estado;
+        this.archivoPdf = archivoPdf;
     }
 
     // Getters y Setters
@@ -58,4 +62,7 @@ public class VehiculoDocumento {
 
     public String getEstado() { return estado; }
     public void setEstado(String estado) { this.estado = estado; }
+
+    public byte[] getArchivoPdf() { return archivoPdf; }
+    public void setArchivoPdf(byte[] archivoPdf) { this.archivoPdf = archivoPdf; }
 }

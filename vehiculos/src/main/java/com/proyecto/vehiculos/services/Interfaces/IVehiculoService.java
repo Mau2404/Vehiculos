@@ -2,6 +2,7 @@ package com.proyecto.vehiculos.services.Interfaces;
 
 import com.proyecto.vehiculos.dto.CrearVehiculoDTO;
 import com.proyecto.vehiculos.dto.DocumentoEntradaDTO;
+import com.proyecto.vehiculos.dto.DocumentoPdfDTO;
 import com.proyecto.vehiculos.dto.RespuestaVehiculoDTO;
 import com.proyecto.vehiculos.Entities.Vehiculo;
 import com.proyecto.vehiculos.Entities.VehiculoDocumento;
@@ -23,4 +24,5 @@ public interface IVehiculoService {
     
     // Servicio de asociación de documento adicional
     VehiculoDocumento asociarDocumento(Long vehiculoId, DocumentoEntradaDTO dto);
+    List<VehiculoDocumento> cargarDocumentosPdf(Long id, List<DocumentoPdfDTO> listaDtos);
 }
